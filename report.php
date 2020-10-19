@@ -345,11 +345,12 @@ class quiz_filedownloader_report extends quiz_attempts_report {
         $attempt->idnumber = (empty($attempt->idnumber)) ? 'xxxxxx' : $attempt->idnumber;
 
         $path = array();
-
-        $path[0] = 'Question ' . $attempt->slot . ' - ' . $attempt->qname . '/';
+        
+        $path[0] = 'Question ' . $attempt->slot . ' - ' . preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->qname) . '/';
         
         $path[1] = $attempt->idnumber . '(' . $attempt->userid . ')' . ' ' .
-        $attempt->firstname . ' ' . $attempt->lastname;
+        preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->firstname) . ' ' .
+        preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->lastname);
 
         if (isset($data->chooseableanonymization)) {
             if ($data->chooseableanonymization == 1) {
