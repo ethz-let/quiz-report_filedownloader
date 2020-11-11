@@ -262,7 +262,7 @@ class quiz_filedownloader_report extends quiz_attempts_report {
 
     protected function filedownloader_process_files($course, $quiz, $cmid, $attempts, $data = null, $configfileareas) {
 
-        global $CFG;
+        global $DB, $CFG;
 
         require_once($CFG->libdir . '/filelib.php');
 
@@ -273,8 +273,13 @@ class quiz_filedownloader_report extends quiz_attempts_report {
         $zipcontent     = array();
         $zipname        = clean_filename("$course->fullname - $quiz->name - $cmid.zip");
 
-        foreach ($attempts as $attempt) {
+        $quiz           = $DB->get_record('quiz', array('id' => $quiz->id), '*', MUST_EXIST);
+        $cm             = get_coursemodule_from_instance('quiz', $quiz->id, $quiz->course);
+        $course         = $DB->get_record('course', array('id' => $quiz->course), '*', MUST_EXIST);
+        $quizobj        = new quiz($quiz, $cm, $course);
+        $structure      = $quizobj->get_structure();
 
+        foreach ($attempts as $attempt) {
             $quba               = question_engine::load_questions_usage_by_activity($attempt->quid);
             $qubacontextid      = $quba->get_owning_context()->id;
             $questionattempt    = $quba->get_question_attempt($attempt->slot);
@@ -282,6 +287,7 @@ class quiz_filedownloader_report extends quiz_attempts_report {
             $filearea           = $configfileareas[$attempt->qtype];
             $lastqtvar          = $questionattempt->get_last_qt_var($filearea);
             $responsefileareas  = $questionattempt->get_question()->qtype->response_file_areas();
+            $questionnumber     = $structure->get_displayed_number_for_slot($attempt->slot);
 
             if (isset($lastqtvar) && in_array($filearea , $responsefileareas)) {
                 $files = $questionattempt->get_last_qt_files($filearea, $qubacontextid);
@@ -289,7 +295,7 @@ class quiz_filedownloader_report extends quiz_attempts_report {
                 continue;
             }
 
-            $path = $this->filedownloader_create_pathes($data, $attempt);
+            $path = $this->filedownloader_create_pathes($data, $attempt, $questionnumber);
 
             $txtfile = $this->filedownloader_create_txtfile(
                 $contextid,
@@ -340,14 +346,14 @@ class quiz_filedownloader_report extends quiz_attempts_report {
      * @return array $path
      */
 
-    public function filedownloader_create_pathes($data, $attempt) {
+    public function filedownloader_create_pathes($data, $attempt, $questionnumber) {
 
         $attempt->idnumber = (empty($attempt->idnumber)) ? 'xxxxxx' : $attempt->idnumber;
 
         $path = array();
-        
-        $path[0] = 'Question ' . $attempt->slot . ' - ' . preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->qname) . '/';
-        
+
+        $path[0] = 'Question ' . $questionnumber . ' - ' . preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->qname) . '/';
+
         $path[1] = $attempt->idnumber . '(' . $attempt->userid . ')' . ' ' .
         preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->firstname) . ' ' .
         preg_replace("/[^a-zA-Z0-9.]/", " ", $attempt->lastname);
