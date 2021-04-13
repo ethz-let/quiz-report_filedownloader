@@ -260,7 +260,7 @@ class quiz_filedownloader_report_testcase extends advanced_testcase {
 
     public function test_filedownloader_create_pathes() {
 
-        $this->resetAfterTest();
+        $this->resetAfterTest(true);
 
         $report = new quiz_filedownloader_report();
 
@@ -276,7 +276,8 @@ class quiz_filedownloader_report_testcase extends advanced_testcase {
         $course             = $generator->create_course();
         $student1           = $generator->create_user(array('firstname' => 'Herbert',
                                                             'lastname'  => 'West',
-                                                            'username'  => 'hwest'));
+                                                            'username'  => 'hwest',
+                                                            'idnumber' => 'u_00001'));
         $student2           = $generator->create_user(array('firstname' => 'Keziah',
                                                             'lastname'  => 'Mason',
                                                             'username'  => 'nahab'));
@@ -319,6 +320,17 @@ class quiz_filedownloader_report_testcase extends advanced_testcase {
         quiz_start_new_attempt($quizobj, $quba, $attempt, 2, $timenow);
         quiz_attempt_save_started($quizobj, $quba, $attempt);
 
+        // Create student 1 - attempt 3.
+        $quizobj    = quiz::create($quiz->id, $student1->id);
+        $quba       = question_engine::make_questions_usage_by_activity('mod_quiz', $quizobj->get_context());
+        $quba->set_preferred_behaviour($quizobj->get_quiz()->preferredbehaviour);
+
+        $timenow    = time();
+        $attempt    = quiz_create_attempt($quizobj, 3, false, $timenow, false, $student1->id);
+
+        quiz_start_new_attempt($quizobj, $quba, $attempt, 3, $timenow);
+        quiz_attempt_save_started($quizobj, $quba, $attempt);
+
         // Create student 2 - attempt 1.
         $quizobj    = quiz::create($quiz->id, $student2->id);
         $quba       = question_engine::make_questions_usage_by_activity('mod_quiz', $quizobj->get_context());
@@ -330,36 +342,39 @@ class quiz_filedownloader_report_testcase extends advanced_testcase {
         quiz_start_new_attempt($quizobj, $quba, $attempt, 1, $timenow);
         quiz_attempt_save_started($quizobj, $quba, $attempt);
 
+        $structure  = $quizobj->get_structure();
+
         $validqtypes        = array(0 => 'essay');
 
         // Get userattempts.
         $studentattempts    = $report->filedownloader_get_userattempts($quiz->id, $validqtypes);
-        $pathes             = array();
-        $iterator           = 0;
 
         // Create pathes.
         foreach ($studentattempts as $key => $studentattempt) {
             $questionattempt = $quba->get_question_attempt($studentattempt->slot);
-            $pathes[$iterator++] = $report->filedownloader_create_pathes($data, $studentattempt, $questionattempt);
-        }
+            $questionnumber = $structure->get_displayed_number_for_slot($studentattempt->slot);
+            $path = $report->filedownloader_create_pathes($data, $studentattempt, $questionnumber);
 
-        // Check.
-        foreach ($pathes as $iterator => $path) {
-            if ($iterator == 0) {
+            if ($studentattempt->username == "hwest" && $studentattempt->num == 1) {
                 $this->assertEquals('Question 1 - Essay question with filepicker and attachments/', $path[0]);
-                $this->assertRegexp('/hwest-HerbertWest/', $path[1]);
+                $this->assertRegexp('/u_00001\(.+?\)\sHerbert\sWest/', $path[1]);
                 $this->assertEquals('/', $path[2]);
                 $this->assertEquals('Attempt 1/', $path[3]);
-            } else if ($iterator == 1) {
+            } else if ($studentattempt->username == "hwest" && $studentattempt->num == 2) {
                 $this->assertEquals('Question 1 - Essay question with filepicker and attachments/', $path[0]);
-                $this->assertRegexp('/hwest-HerbertWest/', $path[1]);
+                $this->assertRegexp('/u_00001\(.+?\)\sHerbert\sWest/', $path[1]);
                 $this->assertEquals('/', $path[2]);
                 $this->assertEquals('Attempt 2/', $path[3]);
-            } else if ($iterator == 3) {
+            } else if ($studentattempt->username == "hwest" && $studentattempt->num == 3) {
                 $this->assertEquals('Question 1 - Essay question with filepicker and attachments/', $path[0]);
-                $this->assertRegexp('/nahab-KeziahMason-/', $path[1]);
+                $this->assertRegexp('/u_00001\(.+?\)\sHerbert\sWest/', $path[1]);
                 $this->assertEquals('/', $path[2]);
-                $this->assertEquals('Attempt 1/', $path[3]);
+                $this->assertEquals('Attempt 3/', $path[3]);
+            } else if ($studentattempt->username == "nahab" && $studentattempt->num == 1) {
+                $this->assertEquals('Question 1 - Essay question with filepicker and attachments/', $path[0]);
+                $this->assertRegexp('/xxxxxx\(.+?\)\sKeziah\sMason/', $path[1]);
+                $this->assertEquals('/', $path[2]);
+                $this->assertEquals('', $path[3]);
             }
         }
     }
@@ -409,6 +424,9 @@ class quiz_filedownloader_report_testcase extends advanced_testcase {
         // Test functionality.
         $studentattempts = $report->filedownloader_get_userattempts($quiz->id, $validqtypes);
         $context = context_course::instance($course->id);
+        $data = (object) array(
+            "chooseableanonymization" => 0
+        );
 
         foreach ($studentattempts as $student) {
             $questionattempt    = $quba->get_question_attempt($student->slot);
@@ -418,7 +436,8 @@ class quiz_filedownloader_report_testcase extends advanced_testcase {
                                                                         $course->fullname,
                                                                         $course->id,
                                                                         $questionattempt->get_question()->name,
-                                                                        $questionattempt->get_question()->id);
+                                                                        $questionattempt->get_question()->id,
+                                                                        $data);
             $content = $content->get_content();
 
             $this->assertRegexp('/User:     Randolph Carter \(Student ID: -not available-, User ID:/', $content);
