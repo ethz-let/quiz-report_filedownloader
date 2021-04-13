@@ -25,6 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Post-install script
+ */
 function xmldb_quiz_filedownloader_install() {
 
     global $DB;

@@ -28,13 +28,15 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/quiz/report/attemptsreport.php');
 require_once($CFG->dirroot . '/mod/quiz/report/filedownloader/filedownloadersettings_form.php');
 
+/**
+ * Filedownloader helps teachers to download files submitted within quizattempts
+ */
 class quiz_filedownloader_report extends quiz_attempts_report {
 
     /**
      * Returns the list of qtypes set in the plugin config.
      * @return array $configqtypes
      */
-
     public function filedownloader_get_config_qtypes() {
 
         $configqtypes = array();
@@ -137,7 +139,6 @@ class quiz_filedownloader_report extends quiz_attempts_report {
      * @param array $validqtypes
      * @return object $userattempts
      */
-
     public function filedownloader_get_userattempts($quizid, $validqtypes) {
 
         if (count($validqtypes) > 0) {
@@ -185,12 +186,12 @@ class quiz_filedownloader_report extends quiz_attempts_report {
     }
 
     /**
+     * Render the downloadpage.
      * @param object $quiz
      * @param cm $cm
      * @param object $course
      * @return bool
      */
-
     public function display($quiz, $cm, $course) {
 
         global $OUTPUT;
@@ -251,15 +252,14 @@ class quiz_filedownloader_report extends quiz_attempts_report {
 
     /**
      * Processes the attempts and creates a zip file.
-     * @param object $quiz
      * @param object $course
+     * @param object $quiz
      * @param int $cmid
      * @param array $attempts
      * @param array $data
      * @param array $configfileareas
      * @return bool
      */
-
     protected function filedownloader_process_files($course, $quiz, $cmid, $attempts, $data = null, $configfileareas) {
 
         global $DB, $CFG;
@@ -343,9 +343,9 @@ class quiz_filedownloader_report extends quiz_attempts_report {
      * Creates a pathname for the currently processed file
      * @param object $data
      * @param object $attempt
+     * @param int $questionnumber
      * @return array $path
      */
-
     public function filedownloader_create_pathes($data, $attempt, $questionnumber) {
 
         $attempt->idnumber = (empty($attempt->idnumber)) ? 'xxxxxx' : $attempt->idnumber;
@@ -388,9 +388,9 @@ class quiz_filedownloader_report extends quiz_attempts_report {
      * @param int $courseid
      * @param string $questionname
      * @param int $questionid
+     * @param object $data
      * @return object $file
      */
-
     public function filedownloader_create_txtfile($contextid, $attempt, $coursename, $courseid, $questionname, $questionid, $data) {
 
         $fs = get_file_storage();

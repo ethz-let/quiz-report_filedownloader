@@ -27,8 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/formslib.php');
 
+/**
+ * Settingsform for filedonwloader report.
+ */
 class quiz_filedownloader_settings_form extends moodleform {
 
+    /**
+     * Add elements to form
+     */
     public function definition() {
 
         global $CFG;
@@ -54,9 +60,10 @@ class quiz_filedownloader_settings_form extends moodleform {
 
         if (get_config('quiz_filedownloader', 'chooseableanonymization')) {
 
-            $mform->addElement('select', 'chooseableanonymization', get_string('adminsetting_anonymizedownload', 'quiz_filedownloader'), array(
-                0 => get_string('no', 'quiz_filedownloader'),
-                1 => get_string('yes', 'quiz_filedownloader')
+            $mform->addElement('select', 'chooseableanonymization',
+                get_string('adminsetting_anonymizedownload', 'quiz_filedownloader'), array(
+                    0 => get_string('no', 'quiz_filedownloader'),
+                    1 => get_string('yes', 'quiz_filedownloader')
             ));
 
             $mform->addHelpButton('chooseableanonymization', 'adminsetting_anonymizedownload', 'quiz_filedownloader');

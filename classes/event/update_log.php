@@ -34,22 +34,36 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2019 ETH Zurich
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  **/
-
 class update_log extends \core\event\base {
 
+    /**
+     * Initializaion.
+     */
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
     }
 
+    /**
+     * Returns name.
+     * @return string
+     */
     public static function get_name() {
         return get_string('eventupdate_log', 'quiz_filedownloader');
     }
 
+    /**
+     * Returns description.
+     * @return string
+     */
     public function get_description() {
         return "User with id '$this->userid' has downloaded quiz sumbissions.";
     }
 
+    /**
+     * Returns url.
+     * @return string
+     */
     public function get_url() {
         return new \moodle_url('/mod/quiz/report.php', array(
             'id' => $this->contextinstanceid,
@@ -57,6 +71,10 @@ class update_log extends \core\event\base {
         ));
     }
 
+    /**
+     * Returns legacy log data.
+     * @return array
+     */
     public function get_legacy_logdata() {
         return array(
             $this->courseid,
