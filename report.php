@@ -112,7 +112,7 @@ class quiz_filedownloader_report extends quiz_attempts_report {
 
         foreach ($configqtypes as $configqtype) {
 
-            if (!array_key_exists($configqtype, $configfileareas)) {
+            if (!property_exists((object) $configfileareas, $configqtype)) {
                 array_push($errors, get_string('response_nofilearea', 'quiz_filedownloader') . $configqtype);
                 continue;
             }
