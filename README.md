@@ -1,5 +1,7 @@
 # Filedownloader
 
+![](https://github.com/ethz-let/quiz-report_filedownloader/actions/workflows/moodle-ci.yml/badge.svg)
+
 ## What it is
 The filedownloader plugin lets you download files attached to questions within a quiz.
 The plugin lets you choose which questiontypes will be included in the download. 
