@@ -272,6 +272,12 @@ class quiz_filedownloader_report extends quiz_attempts_report {
         $contextid      = context_course::instance($course->id)->id;
         $zipcontent     = array();
         $zipname        = clean_filename("$course->fullname - $quiz->name - $cmid.zip");
+        $zipname        = preg_replace('/[^a-zA-Z0-9.]/', '_', $zipname);
+        $zipname        = preg_replace('/_+/', '_', $zipname);
+
+        if (strlen($zipname) > 50) {
+          $zipname = substr($zipname, 0, 50) . '.zip';
+        }
 
         $quiz           = $DB->get_record('quiz', array('id' => $quiz->id), '*', MUST_EXIST);
         $cm             = get_coursemodule_from_instance('quiz', $quiz->id, $quiz->course);
@@ -314,7 +320,11 @@ class quiz_filedownloader_report extends quiz_attempts_report {
 
             foreach ($files as $zipfilepath => $file) {
                 if ($file->get_filepath() == '/') {
-                    $filename = $file->get_filename();
+                    $filename = preg_replace('/[^a-zA-Z0-9.]/', '_', $file->get_filename());
+                    $filename  = preg_replace('/_+/', '_', $filename);
+                    if (strlen($filename) > 30) {
+                      $filename = substr($filename, 0, 30) . '.zip';
+                    }
                     $pathname = clean_param($path[0] . $path[1] . $path[2] . $path[3] . $filename, PARAM_PATH);
                     $zipcontent[$pathname] = $file;
                 }
