@@ -54,6 +54,4 @@ $string['texfile_anonymized'] = '-anonymisiert- ';
 $string['textfile_notavailable'] = '-nicht verfügbar-';
 $string['yes'] = 'Ja';
 $string['zip_inonefolder'] = 'Dateien in einen einzigen Ordner pro Frage herunterladen';
-$string['zip_inonefolder_help'] = 'Abgegebene Dateien werden zusammengefasst in je einem Ordner pro gestellter Frage gespeichert.<br>' .
-    'Es werden keine zusätzlichen Unterordner für Studenten und Versuche angelegt.<br>' .
-    '<b>(nicht empfohlen für summative Prüfungen)</b>';
+$string['zip_inonefolder_help'] = 'Abgegebene Dateien werden zusammengefasst in je einem Ordner pro gestellter Frage gespeichert.<br>Es werden keine zusätzlichen Unterordner für Studenten und Versuche angelegt.<br><b>(nicht empfohlen für summative Prüfungen)</b>';
