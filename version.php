@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2023060400;
+$plugin->version    = 2023111300;
 $plugin->requires   = 2017111300;
 $plugin->component  = 'quiz_filedownloader';
 $plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '0.2 for Moodle 3.7+ and 4.x';
+$plugin->release    = '4.3';
