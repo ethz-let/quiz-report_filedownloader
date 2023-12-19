@@ -19,7 +19,7 @@
  *
  * @package   quiz_filedownloader
  * @copyright 2019 ETH Zurich
- * @author    Martin Hanusch (martin.hanusch@let.ethz.ch)
+ * @author    Hourani (hourani@id.ethz.ch)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -217,8 +217,8 @@ class quiz_filedownloader_report extends quiz_attempts_report {
                         $quiz,
                         $cm->id,
                         $userattempts,
-                        $data,
-                        $configfileareas);
+                        $configfileareas,
+                        $data);
                 }
             }
         }
@@ -260,7 +260,7 @@ class quiz_filedownloader_report extends quiz_attempts_report {
      * @param array $configfileareas
      * @return bool
      */
-    protected function filedownloader_process_files($course, $quiz, $cmid, $attempts, $data = null, $configfileareas) {
+    protected function filedownloader_process_files($course, $quiz, $cmid, $attempts, $configfileareas, $data = null) {
 
         global $DB, $CFG;
 
