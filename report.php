@@ -323,7 +323,8 @@ class quiz_filedownloader_report extends quiz_attempts_report {
                     $filename = preg_replace('/[^a-zA-Z0-9.]/', '_', $file->get_filename());
                     $filename  = preg_replace('/_+/', '_', $filename);
                     if (strlen($filename) > 30) {
-                      $filename = substr($filename, 0, 30) . '.zip';
+                      $fileext = '.' . substr($filename, strrpos($filename, '.') + 1);
+                      $filename = substr($filename, 0, 30) . $fileext;
                     }
                     $pathname = clean_param($path[0] . $path[1] . $path[2] . $path[3] . $filename, PARAM_PATH);
                     $zipcontent[$pathname] = $file;
