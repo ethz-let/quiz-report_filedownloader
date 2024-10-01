@@ -19,14 +19,14 @@
  *
  * @package   quiz_filedownloader
  * @copyright 2019 ETH Zurich
- * @author    A Hourani (hourani@id.ethz.ch)
+ * @author    ETH Zurich (moodle@id.ethz.ch)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version    = 2023121900;
+$plugin->version    = 2024100100;
 $plugin->requires   = 2017111300;
 $plugin->component  = 'quiz_filedownloader';
 $plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '4.3';
+$plugin->release    = '4.5';

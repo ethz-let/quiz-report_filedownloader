@@ -19,19 +19,18 @@
  *
  * @package   quiz_filedownloader
  * @copyright 2019 ETH Zurich
- * @author    A Hourani (hourani@id.ethz.ch)
+ * @author    ETH Zurich (moodle@id.ethz.ch)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/quiz/report/attemptsreport.php');
 require_once($CFG->dirroot . '/mod/quiz/report/filedownloader/filedownloadersettings_form.php');
 
 /**
  * Filedownloader helps teachers to download files submitted within quizattempts
  */
-class quiz_filedownloader_report extends quiz_attempts_report {
+class quiz_filedownloader_report extends mod_quiz\local\reports\attempts_report {
 
     /**
      * Returns the list of qtypes set in the plugin config.
