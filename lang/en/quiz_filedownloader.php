@@ -53,5 +53,5 @@ $string['response_nosuchqtype'] = 'The following question types are not installe
 $string['texfile_anonymized'] = '-anonymized- ';
 $string['textfile_notavailable'] = '-not available-';
 $string['yes'] = 'Yes';
-$string['zip_inonefolder'] = 'Download files into a single folder for each question';
+$string['zip_inonefolder'] = 'Download files into a single folder for each student';
 $string['zip_inonefolder_help'] = 'For each question submitted files will be stored together in a single folder.<br> No additional subfolders for students and attempts will be created.<br><b>(not recommended for summative exams)</b>';
